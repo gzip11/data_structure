@@ -22,7 +22,7 @@ void GetElemByIndex(SqList &L,ElemType i);
 //按值查找
 int GetIndexByElem(SqList &L,ElemType e);
 //在指定位置插入元素
-void InsertElem(SqList &L,ElemType i,ElemType &e);
+bool InsertElem(SqList &L,ElemType i,ElemType e);
 //在指定位置删除元素
 bool DeleteElem(SqList &L,ElemType i);
 //输出线性表
@@ -33,59 +33,17 @@ void welcome();
 
 int main() {
     SqList L;
-    int code = 1;
-    while (code!=0){
-        int index = 0,e = 0;
-        welcome();
-        std::cin>>code;
-        switch (code) {
-            case 1:
-                if (InitList(L))
-                    std::cout << "初始化成功" << std::endl;
-                break;
-            case 2:
-                ClearList(L);
-                break;
-            case 3:
-                if (IsEmptyList(L)){
-                    std::cout << "线性表为空！" << std::endl;
-                }else{
-                    std::cout << "线性表不为空" << std::endl;
-                }
-                break;
-            case 4:
-                std::cout << "线性表长度为：" << GetLength(L) << std::endl;
-                break;
-            case 5:
-                std::cout << "请输入一个0到9的数字" << std::endl;
-                std::cin >> e;
-                GetElemByIndex(L,e);
-                break;
-            case 6:
-                std::cout << "请输入查找值" << std::endl;
-                std::cin >> e;
-                GetIndexByElem(L,e);
-                break;
-            case 7:
-                std::cout << "请输入要插入的元素的位置和值";
-                std::cin >> index >> e;
-                InsertElem(L,index,e);
-                break;
-            case 8:
-                std::cout << "请输入要删除元素的位置";
-                std::cin >> index;
-                DeleteElem(L,index);
-                break;
-            case 9:
-                PrintList(L);
-                break;
-            default:
-                std::cout << "请输入合法的数字！" << std::endl;
-                break;
-        }
-    }
-
-    system("pause");
+    InitList(L);
+    IsEmptyList(L);
+    InsertElem(L,1,1);
+    InsertElem(L,2,2);
+    InsertElem(L,3,3);
+    GetLength(L);
+    GetElemByIndex(L,1);
+    GetIndexByElem(L,3);
+    PrintList(L);
+    DeleteElem(L,2);
+    PrintList(L);
     return 0;
 }
 
@@ -121,7 +79,7 @@ int GetLength(SqList &L){
 
 void GetElemByIndex(SqList &L,ElemType i){
     //判断i的值是否合法
-    if (i < 0 || i > L.length)
+    if (i <= 0 || i > L.length)
         std::cout << "输入的位置不合法!" << std::endl;
     else
         std::cout << "位置" << i << "的元素为：" << L.data[i-1] << std::endl;
@@ -137,22 +95,25 @@ int GetIndexByElem(SqList &L,ElemType e){
     return 0;
 }
 
-void InsertElem(SqList &L,ElemType i,ElemType &e){
-    if (i > 0 && i <= L.length && L.length < INITIALSIZE){
-        //在指定位置元素前插入
-        for(int j = L.length;j >= i;j++){
-            L.data[j] = L.data[j-1];
-        }
-        L.data[i-1] = e;
-        ++L.length;//表长增加1
-        std::cout << "添加成功!" << std::endl;
-    }else{
-        std::cout << "插入位置不合法!" << std::endl;
+bool InsertElem(SqList &L,ElemType i,ElemType e){
+    if (L.length >= INITIALSIZE){
+        std::cout << "线性表已满！" << std::endl;
+        return false;
+    }else if (i < 1 && i > L.length+1){
+        std::cout << "插入的位置不合法！" << std::endl;
+        return false;
     }
+    for(int j = L.length;j >= i;i--){
+        L.data[j] = L.data[j-1];
+    }
+    L.data[i-1]=e;
+    ++L.length;
+    std::cout << "添加成功！" << std::endl;
+    return true;
 }
 
 bool DeleteElem(SqList &L,ElemType i){
-    if (i > 0 && i <= L.length && L.length != 0){
+    if (i > 0 && i < L.length && L.length != 0){
         for(int j = i;j < L.length;j++){
             L.data[j-1] = L.data[j];
         }
