@@ -1,3 +1,0 @@
-﻿  sqStack.cpp
-D:\Code\c++\data_structure\02_stack\01_sqStack\SqStack\sqStack.cpp(48): warning C4715: “Pop”: 不是所有的控件路径都返回值
-  SqStack.vcxproj -> D:\Code\c++\data_structure\02_stack\01_sqStack\SqStack\x64\Debug\SqStack.exe
